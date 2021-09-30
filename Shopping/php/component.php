@@ -35,18 +35,27 @@ function component($productName, $productPrice, $productImg, $productID){
     echo $element;
     
 }
+// \"cart.php?action=remove&id=$productID\" xác nhận có muốn xóa mặt hàng khỏi giỏ hàng hay không
 
-function cartElement($productImg, $productName, $productPrice){
+// <!-- san pham - thong tin ... san pham -->
+// <div class=\"col-md-6\">
+// <h5 class=\"pt-2\">$productName</h5>
+
+// <!-- them - giam so luong san pham trong gio hang -->
+// <div class=\"col-md-3 py-5\">
+// <div>
+// <button type=\"button\" class=\"btn bg-light border rounded-circle\"><i class=\"fas fa-minus\"></i></button>
+function cartElement($productImg, $productName, $productPrice, $productID){
     $element ="
     
-    <form action=\"cart.php\" method=\"get\" class=\"cart-items\">
+    <form action=\"cart.php?action=remove&id=$productID\" method=\"post\" class=\"cart-items\">
     <div class=\"border rounded\">
         <div class=\"row bg-white\">
              <div class=\"col-md-3 pl-0\">
                  <img src=$productImg alt=\"Image1\" class=\"img-fluid\">
              </div>
             
-            // <!-- san pham - thong tin ... san pham -->
+          
              <div class=\"col-md-6\">
                  <h5 class=\"pt-2\">$productName</h5>
                     <small class=\"text-secondary\">Seller: Giá ưu đãi cho sinh viên!</small>
@@ -54,7 +63,7 @@ function cartElement($productImg, $productName, $productPrice){
                     <button type=\"submit\" class=\"btn btn-warning\">Lưu sau</button>
                     <button type=\"submit\" class=\"btn btn-danger mx-2\" name=\"remove\">Xóa</button>
                 </div>
-                //<!-- them - giam so luong san pham trong gio hang -->
+               
              <div class=\"col-md-3 py-5\">
                     <div>
                         <button type=\"button\" class=\"btn bg-light border rounded-circle\"><i class=\"fas fa-minus\"></i></button>

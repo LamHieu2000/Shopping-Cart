@@ -2,8 +2,24 @@
     session_start();
     require_once("php/CreateDatabase.php");
     require_once("php/component.php");
-
     $db = new CreateDatabase("Productdb", "Producttb");
+    
+    //xóa sp khỏi giỏ và trả về id của sp đó
+    if(isset($_POST['remove']))
+    {
+       // print_r($_GET['id']);
+       if($_GET['action'] == 'remove'){
+           foreach($_SESSION['cart'] as $key => $value){
+               if($value['product_id'] == $_GET['id'])
+                {
+                    unset($_SESSION['cart'][$key]);
+                    echo "<script>alert('Sản phẩm đã được xóa...')</script>";
+                    echo "<script>windown.location = 'cart.php'</script>";
+                }
+           }
+       }
+    }
+    
 
 ?>
 
@@ -37,9 +53,9 @@
                     <hr>
 
                     <?php 
-
-                        $product_ID = array_column($_SESSION['cart'],'product_ID');
-                        
+                        $total= 0; //tính tổng các mặt hàng có trong cart
+                        if(isset($_SESSION['cart'])){
+                        $product_ID = array_column($_SESSION['cart'],'product_ID'); 
                         $result = $db->getData();
                         while($row = mysqli_fetch_assoc($result)){
                             // lay tat sp trong database
@@ -47,12 +63,16 @@
                             foreach($product_ID as $id){
                                 if($row['id'] == $id){
                                     //in tt sp trong gio hang = cach goi ham cartElement
-                                    cartElement($row['product_image'], $row['product_name'], $row['product_price']);
-                                        1h12
+                                    cartElement($row['product_image'], $row['product_name'], $row['product_price'], $row['id']);                                    
+                                    $total = $total + (int)$row['product_price'];
                                 }
+
                             }
                         }
-
+                            
+                        }else{
+                              echo '<h5>Vỏ hàng trống!!!</h5>';
+                        }
 
                     ?>
 <!--san pham - thong tin ... san pham
@@ -86,8 +106,39 @@
                 </div>
             </div>
 
-            <div class="col-md-5">
-
+            <div class="col-md-4 offset-md-1 border rounded mt-5 bg-white h-26">
+                <div class="pt-4">
+                    <h6>PRICE DETAILS</h6>   
+                    <hr>
+                    <div class="row price-details">
+                        <div class="col-md-6">
+                            <?php
+                            if(isset($_SESSION['cart'])){
+                                $count = count($_SESSION['cart']);
+                                echo'<h6>Price($count items)</h6>';
+                                
+                            }else{
+                                echo'<h6>Price(0 items)</h6>';
+                            }
+                            ?>
+                            <h6>Delivery Charges</h6>
+                            <hr>
+                            <h6>Amount Payable</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>
+                                <?php
+                                    echo $total; //tổng giá các sp có trong giỏ hàng
+                                ?> VND
+                                <h6 class="text-sucess">FREE</h6>
+                                <hr>
+                                <h6><?php
+                                    echo $total;
+                                ?> VND</h6>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
